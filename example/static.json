@@ -1,0 +1,4 @@
+{
+  "name": "example/static",
+  "view": "<p className=\"red\">Hello</p>"
+}

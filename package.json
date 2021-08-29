@@ -1,0 +1,16 @@
+{
+  "name": "blocky",
+  "version": "1.0.0",
+  "description": "WP Block Lang",
+  "main": "src/index.js",
+  "dependencies": {
+    "chevrotain": "^7.0.2",
+    "yargs": "^17.1.1"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "devDependencies": {},
+  "author": "Riad Benguella",
+  "license": "MIT"
+}

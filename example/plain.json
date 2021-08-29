@@ -1,0 +1,9 @@
+{
+  "name": "example/plain",
+  "attributes": {
+    "content": {
+      "type": "string"
+    }
+  },
+  "view": "<wp.plain value={content} />"
+}
