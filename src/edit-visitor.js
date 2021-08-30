@@ -1,4 +1,5 @@
 const { parser } = require("./parser");
+const attributesHandler = require('./attribute-handlers');
 
 const BaseBlockyVisitorWithDefaults =
   parser.getBaseCstVisitorConstructorWithDefaults();
@@ -10,13 +11,19 @@ class SaveVisitor extends BaseBlockyVisitorWithDefaults {
   }
 
   document(ctx) {
-    return `function ( { attributes } ) { 
+    return `function ( { attributes, setAttributes } ) { 
   return ${this.visit(ctx.element[0], true)};
 }`;
   }
 
   element(ctx, isTopLevel) {
     const elementName = ctx.Name[0].image;
+
+    const attributeHandler = attributesHandler.find(handler => handler.name === elementName);
+    if ( attributeHandler ) {
+      return attributeHandler.edit(ctx, isTopLevel);
+    }
+
     let childrenStr = "undefined";
     if (ctx.content?.[0]) {
       const children = ctx.content[0].children.elementContent

@@ -45,6 +45,7 @@ yargs(hideBin(process.argv))
     const blockJson = {
       apiVersion: 2,
       version: source.version || "0.1.0",
+      attributes: source.attributes || {}, // TODO: Add attributes validation and parsing information extracted from view.
       name: source.name,
       title: source.title ?? source.name,
       category: source.category ?? "common",

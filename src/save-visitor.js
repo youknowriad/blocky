@@ -1,4 +1,5 @@
 const { parser } = require("./parser");
+const attributesHandler = require('./attribute-handlers');
 
 const BaseBlockyVisitorWithDefaults =
   parser.getBaseCstVisitorConstructorWithDefaults();
@@ -17,6 +18,12 @@ class SaveVisitor extends BaseBlockyVisitorWithDefaults {
 
   element(ctx, isTopLevel) {
     const elementName = ctx.Name[0].image;
+
+    const attributeHandler = attributesHandler.find(handler => handler.name === elementName);
+    if ( attributeHandler ) {
+      return attributeHandler.save(ctx, isTopLevel);
+    }
+
     let childrenStr = "undefined";
     if (ctx.content?.[0]) {
       const children = ctx.content[0].children.elementContent
