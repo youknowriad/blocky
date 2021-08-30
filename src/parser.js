@@ -52,7 +52,14 @@ class Xml_parser extends CstParser {
     $.RULE("attribute", () => {
       $.CONSUME(t.Name);
       $.CONSUME(t.EQUALS);
-      $.CONSUME(t.STRING);
+      $.OR([
+        { ALT: () => $.CONSUME(t.STRING) },
+        { ALT: () => {
+          $.CONSUME(t.OPEN_DYNAMIC_VALUE);
+          $.CONSUME2(t.Name);
+          $.CONSUME(t.CLOSE_DYNAMIC_VALUE);
+        } },
+      ]);
     });
 
     $.RULE("chardata", () => {

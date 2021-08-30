@@ -89,6 +89,9 @@ const EQUALS = createToken({ name: "EQUALS", pattern: /=/ });
 
 const Name = createToken({ name: "Name", pattern: makePattern`${f.Name}` });
 
+const OPEN_DYNAMIC_VALUE = createToken({ name: "OPEN_DYNAMIC_VALUE", pattern: /{/ });
+const CLOSE_DYNAMIC_VALUE = createToken({ name: "CLOSE_DYNAMIC_VALUE", pattern: /}/ });
+
 const xmlLexerDefinition = {
   defaultMode: "OUTSIDE",
 
@@ -99,7 +102,7 @@ const xmlLexerDefinition = {
       OPEN,
       TEXT,
     ],
-    INSIDE: [CLOSE, SLASH_CLOSE, SLASH, EQUALS, STRING, Name],
+    INSIDE: [CLOSE, SLASH_CLOSE, SLASH, EQUALS, STRING, Name, OPEN_DYNAMIC_VALUE, CLOSE_DYNAMIC_VALUE],
   },
 };
 

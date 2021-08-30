@@ -5,12 +5,17 @@
   "main": "src/index.js",
   "dependencies": {
     "chevrotain": "^7.0.2",
+    "lodash": "^4.17.21",
     "yargs": "^17.1.1"
   },
   "scripts": {
-    "start": "node src/index.js"
+    "cli": "node src/index.js",
+    "build-all": "npm run cli build example/plain.json && npm run cli build example/static.json",
+    "wp-env": "wp-env"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@wordpress/env": "^4.1.0"
+  },
   "author": "Riad Benguella",
   "license": "MIT"
 }
