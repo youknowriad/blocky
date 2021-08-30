@@ -5,7 +5,8 @@ const fs = require("fs");
 const lodash = require("lodash");
 const { lexer } = require("./lexer");
 const { parser } = require("./parser");
-const { visitor } = require("./save-visitor");
+const { visitor: saveVisitor } = require("./save-visitor");
+const { visitor: editVisitor } = require("./edit-visitor");
 
 
 const yargs = require('yargs/yargs')
@@ -60,15 +61,16 @@ yargs(hideBin(process.argv))
     if (parser.errors.length > 0) {
       throw new Error("sad sad panda, Parsing errors detected");
     }
-    const saveFunction = visitor.visit(cst);
-    const editorJsFile = `wp.blocks.registerBlockType( { name: "${source.name }", save: ${saveFunction} } );`
+    const saveFunction = saveVisitor.visit(cst);
+    const editFunction = editVisitor.visit(cst);
+    const editorJsFile = `wp.blocks.registerBlockType( "${source.name }", { save: ${saveFunction}, edit: ${editFunction} } );`
     fs.writeFileSync( path.resolve( blockOutDirectory, 'editor.js' ), editorJsFile );
 
     // Creating editor.asset.php file
     const assetsTemplateFile = path.resolve( __dirname, "assets.php" );
     const assetsTemplateContent = fs.readFileSync( assetsTemplateFile, "utf-8" ); 
     const assetsFile = assetsTemplateContent
-      .replace(/\{dependencies\}/g, '"wp-blocks"' )
+      .replace(/\{dependencies\}/g, '"wp-element", "wp-blocks", "wp-block-editor"' )
       .replace(/\{version\}/g, blockJson.version );
     fs.writeFileSync( path.resolve( blockOutDirectory, "editor.asset.php" ), assetsFile );
   })

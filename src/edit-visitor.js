@@ -44,8 +44,8 @@ class SaveVisitor extends BaseBlockyVisitorWithDefaults {
 
     if (isTopLevel) {
       attributesStr = attributesStr = "null"
-        ? "wp.blockEditor.useBlockProps.save()"
-        : `wp.blockEditor.useBlockProps.save(${attributesStr})`;
+        ? "wp.blockEditor.useBlockProps()"
+        : `wp.blockEditor.useBlockProps(attributesStr)`;
     }
 
     return `wp.element.createElement( "${elementName}" , ${attributesStr}, ${childrenStr})`;
