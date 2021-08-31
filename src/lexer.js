@@ -54,12 +54,6 @@ const SEA_WS = createToken({
   pattern: /( |\t|\n|\r\n)+/,
 });
 
-const XMLDeclOpen = createToken({
-  name: "XMLDeclOpen",
-  pattern: /<\?xml[ \t\r\n]/,
-  push_mode: "INSIDE",
-});
-
 const SLASH_OPEN = createToken({
   name: "SLASH_OPEN",
   pattern: /<\//,
@@ -68,7 +62,7 @@ const SLASH_OPEN = createToken({
 
 const OPEN = createToken({ name: "OPEN", pattern: /</, push_mode: "INSIDE" });
 
-const TEXT = createToken({ name: "TEXT", pattern: /[^<&]+/ });
+const TEXT = createToken({ name: "TEXT", pattern: /[^<&{]+/ });
 
 const CLOSE = createToken({ name: "CLOSE", pattern: />/, pop_mode: true });
 
@@ -89,8 +83,25 @@ const EQUALS = createToken({ name: "EQUALS", pattern: /=/ });
 
 const Name = createToken({ name: "Name", pattern: makePattern`${f.Name}` });
 
-const OPEN_DYNAMIC_VALUE = createToken({ name: "OPEN_DYNAMIC_VALUE", pattern: /{/ });
-const CLOSE_DYNAMIC_VALUE = createToken({ name: "CLOSE_DYNAMIC_VALUE", pattern: /}/ });
+const OPEN_DYNAMIC_VALUE = createToken({
+  name: "OPEN_DYNAMIC_VALUE",
+  pattern: /{/,
+});
+const CLOSE_DYNAMIC_VALUE = createToken({
+  name: "CLOSE_DYNAMIC_VALUE",
+  pattern: /}/,
+});
+
+const OPEN_DYNAMIC_CONTENT = createToken({
+  name: "OPEN_DYNAMIC_CONTENT",
+  pattern: /{{/,
+  push_mode: "INSIDE_CONTENT",
+});
+const CLOSE_DYNAMIC_CONTENT = createToken({
+  name: "CLOSE_DYNAMIC_CONTENT",
+  pattern: /}}/,
+  pop_mode: true,
+});
 
 const xmlLexerDefinition = {
   defaultMode: "OUTSIDE",
@@ -98,11 +109,25 @@ const xmlLexerDefinition = {
   modes: {
     OUTSIDE: [
       SEA_WS,
+      OPEN_DYNAMIC_CONTENT,
       SLASH_OPEN,
       OPEN,
       TEXT,
     ],
-    INSIDE: [CLOSE, SLASH_CLOSE, SLASH, EQUALS, STRING, Name, OPEN_DYNAMIC_VALUE, CLOSE_DYNAMIC_VALUE],
+    INSIDE: [
+      CLOSE,
+      SLASH_CLOSE,
+      SLASH,
+      EQUALS,
+      STRING,
+      Name,
+      OPEN_DYNAMIC_VALUE,
+      CLOSE_DYNAMIC_VALUE,
+    ],
+    INSIDE_CONTENT: [
+      CLOSE_DYNAMIC_CONTENT,
+      Name,
+    ]
   },
 };
 
@@ -112,10 +137,6 @@ const lexer = new Lexer(xmlLexerDefinition, {
   // to expose "fuller" ITokens from the Lexer.
   positionTracking: "full",
   ensureOptimizations: false,
-
-  // TODO: inspect definitions for XML line terminators
-  lineTerminatorCharacters: ["\n"],
-  lineTerminatorsPattern: /\n|\r\n/g,
 });
 
 module.exports = {

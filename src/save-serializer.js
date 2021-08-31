@@ -17,10 +17,10 @@ function serializeElement(element, isTopLevel = false) {
   if (isTopLevel) {
     attributesStr = attributesStr = "null"
       ? "wp.blockEditor.useBlockProps.save()"
-      : `wp.blockEditor.useBlockProps.save(${attributesStr})`;
+      : `wp.blockEditor.useBlockProps.save( ${attributesStr} )`;
   }
 
-  return `wp.element.createElement( "${elementName}" , ${attributesStr}, ${childrenStr} )`;
+  return `wp.element.createElement( "${elementName}", ${attributesStr}, ${childrenStr} )`;
 }
 
 module.exports = function (blockAST) {

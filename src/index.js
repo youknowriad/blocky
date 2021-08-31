@@ -32,13 +32,14 @@ yargs(hideBin(process.argv)).command(
     const lexingResult = lexer.tokenize(source.view);
     parser.input = lexingResult.tokens;
     const rawAst = parser.document();
+    if (parser.errors.length > 0) {
+      console.log(parser.errors);return;
+      throw new Error("sad sad panda, Parsing errors detected");
+    }
     const blockAst = {
       root: visitor.visit(rawAst),
       attributes: source.attributes,
-    };
-    if (parser.errors.length > 0) {
-      throw new Error("sad sad panda, Parsing errors detected");
-    }
+    };    
 
     // Prepare output directory
     const outDir = path.resolve(argv.outDir);

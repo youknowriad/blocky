@@ -9,5 +9,5 @@
           "label": "Level"
       }
     },
-    "view": "<wp.rich value={content} tagName=\"div\" />"
+    "view": "<div><div><strong>Level: {{level}}</strong></div><wp.rich value={content} tagName=\"div\" /></div>"
   }

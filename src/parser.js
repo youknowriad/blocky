@@ -18,6 +18,7 @@ class Xml_parser extends CstParser {
 
     $.RULE("elementContent", () => {
       $.OR([
+        { ALT: () => $.SUBRULE($.attributeContent) },
         { ALT: () => $.SUBRULE($.element) },
         { ALT: () => $.SUBRULE($.chardata) },
       ]);
@@ -66,6 +67,12 @@ class Xml_parser extends CstParser {
         { ALT: () => $.CONSUME(t.TEXT) },
         { ALT: () => $.CONSUME(t.SEA_WS) },
       ]);
+    });
+
+    $.RULE("attributeContent", () => {
+      $.CONSUME(t.OPEN_DYNAMIC_CONTENT);
+      $.CONSUME(t.Name);
+      $.CONSUME(t.CLOSE_DYNAMIC_CONTENT) 
     });
 
     this.performSelfAnalysis();

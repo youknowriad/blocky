@@ -15,6 +15,8 @@ function extractBlockAttributesFromChildren(children) {
       blockAttributes.read = blockAttributes.read.concat(
         childBlockAttributes.read
       );
+    } else if (child.type === "attributeContent") {
+      blockAttributes.read.push(child.name);
     }
   });
   return blockAttributes;

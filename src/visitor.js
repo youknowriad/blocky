@@ -61,6 +61,8 @@ class Visitor extends BaseBlockyVisitorWithDefaults {
       return this.visit(ctx.element[0]);
     } else if (ctx?.chardata?.[0]) {
       return this.visit(ctx.chardata[0]);
+    } else if (ctx?.attributeContent?.[0]) {
+      return this.visit(ctx?.attributeContent[0])
     }
 
     throw "Unknown element type";
@@ -75,6 +77,13 @@ class Visitor extends BaseBlockyVisitorWithDefaults {
     }
 
     return null;
+  }
+
+  attributeContent(ctx) {
+    return {
+      type: 'attributeContent',
+      name: ctx.Name[0].image,
+    }
   }
 }
 

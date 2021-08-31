@@ -16,13 +16,15 @@ function serializeChildren(children, serializeElement) {
       return serializeElement(child);
     } else if (child.type === "text") {
       return `"${child.content.replace(/"/g, '\\"')}"`;
+    } else if (child.type === "attributeContent") {
+      return `attributes.${child.name}`;
     }
   });
   let childrenStr = "undefined";
   if (childrenSerializations.length === 1) {
     childrenStr = childrenSerializations[0];
   } else if (childrenSerializations.length > 1) {
-    childrenStr = `${childrenSerializations.join(",")}`;
+    childrenStr = `${childrenSerializations.join(", ")}`;
   }
 
   return childrenStr;
