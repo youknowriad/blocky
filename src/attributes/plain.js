@@ -30,5 +30,7 @@ module.exports = {
         blockAttributes.inline.push( valueAttributeAST.value );
 
         return blockAttributes;
-    }
+    },
+
+    dependencies: [ 'wp-element', 'wp-block-editor' ],
 }

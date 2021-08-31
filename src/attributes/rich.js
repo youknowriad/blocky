@@ -50,4 +50,6 @@ module.exports = {
 
     return blockAttributes;
   },
+
+  dependencies: [ 'wp-element', 'wp-block-editor' ],
 };

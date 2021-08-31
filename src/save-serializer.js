@@ -23,8 +23,8 @@ function serializeElement(element, isTopLevel = false) {
   return `wp.element.createElement( "${elementName}" , ${attributesStr}, ${childrenStr} )`;
 }
 
-module.exports = function (blockCst) {
+module.exports = function (blockAST) {
   return `function ( { attributes } ) { 
-    return ${serializeElement(blockCst.root, true)};
+    return ${serializeElement(blockAST.root, true)};
 }`;
 };

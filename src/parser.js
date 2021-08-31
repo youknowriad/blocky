@@ -1,6 +1,5 @@
 const { CstParser } = require("chevrotain");
 const { tokensDictionary: t } = require("./lexer");
-
 class Xml_parser extends CstParser {
   constructor() {
     super(t, { nodeLocationTracking: "full" });
