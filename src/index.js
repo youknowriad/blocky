@@ -5,8 +5,9 @@ const fs = require("fs");
 const lodash = require("lodash");
 const { lexer } = require("./lexer");
 const { parser } = require("./parser");
-const { visitor: saveVisitor } = require("./save-visitor");
-const { visitor: editVisitor } = require("./edit-visitor");
+const { visitor } = require("./visitor");
+const serializeSave = require("./save-serializer");
+const serializeEdit = require("./edit-serializer");
 
 
 const yargs = require('yargs/yargs')
@@ -24,6 +25,15 @@ yargs(hideBin(process.argv))
     const sourceFile = path.resolve(argv.block);
     const inputText = fs.readFileSync(sourceFile, "utf-8");
     const source = JSON.parse( inputText );
+
+    // Parsing the block template
+    const lexingResult = lexer.tokenize(source.view);
+    parser.input = lexingResult.tokens;
+    const rawAst = parser.document();
+    const blockAst = visitor.visit( rawAst );
+    if (parser.errors.length > 0) {
+      throw new Error("sad sad panda, Parsing errors detected");
+    }
     
     // Prepare output directory
     const outDir = path.resolve( argv.outDir );
@@ -55,15 +65,9 @@ yargs(hideBin(process.argv))
     };
     fs.writeFileSync( path.resolve( blockOutDirectory, 'block.json' ), JSON.stringify( blockJson, null, 2 ) );
 
-    // Parsing the view and creating editor.js file
-    const lexingResult = lexer.tokenize(source.view);
-    parser.input = lexingResult.tokens;
-    const cst = parser.document();
-    if (parser.errors.length > 0) {
-      throw new Error("sad sad panda, Parsing errors detected");
-    }
-    const saveFunction = saveVisitor.visit(cst);
-    const editFunction = editVisitor.visit(cst);
+    // Creating editor.js file
+    const saveFunction = serializeSave(blockAst);
+    const editFunction = serializeEdit(blockAst);
     const editorJsFile = `wp.blocks.registerBlockType( "${source.name }", { save: ${saveFunction}, edit: ${editFunction} } );`
     fs.writeFileSync( path.resolve( blockOutDirectory, 'editor.js' ), editorJsFile );
 

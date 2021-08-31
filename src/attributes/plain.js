@@ -1,43 +1,25 @@
+const { serializeAttributeValue } = require('../serializer');
+
 module.exports = {
     name: 'wp.plain',
 
-    save( ctx, isTopLevel ) {
-        const tagNameAttribute = ctx.attribute.find( attributeCtx => attributeCtx.children.Name[0].image === 'tagName')?.children;
-        let tagName;
-        if (tagNameAttribute.STRING) {
-            tagName = tagNameAttribute.STRING[0].image;
-        } else if (tagNameAttribute.Name?.[1]?.image) {
-            tagName = `attributes.${tagNameAttribute.Name[1].image}`;
-        } else {
-            throw "Invalid attribute";
-        }
-
-        const contentAttributeCtx = ctx.attribute.find( attributeCtx => attributeCtx.children.Name[0].image === 'value')?.children;
-        const contentAttributeName = `${contentAttributeCtx.Name[1].image}`;
+    save( element, isTopLevel ) {
+        const tagNameAttribute = element.attributes.find( attr => attr.name === 'tagName' );
+        const tagNameString = serializeAttributeValue( tagNameAttribute );
+        const valueAttributeAST = element.attributes.find( attr => attr.name === 'value' );
         
         // TODO: Inject extra attributes
-
         const attributesStr = isTopLevel ? 'wp.blockEditor.useBlockProps.save()' : 'null';
-        return `wp.element.createElement( ${tagName}, ${attributesStr}, wp.element.createElement(wp.element.RawHTML, null, attributes.${contentAttributeName} ) )`;
+        return `wp.element.createElement( ${tagNameString}, ${attributesStr}, wp.element.createElement(wp.element.RawHTML, null, attributes.${valueAttributeAST.value} ) )`;
     },
 
-    edit( ctx, isTopLevel ) {
-        const tagNameAttribute = ctx.attribute.find( attributeCtx => attributeCtx.children.Name[0].image === 'tagName')?.children;
-        let tagName;
-        if (tagNameAttribute.STRING) {
-            tagName = tagNameAttribute.STRING[0].image;
-        } else if (tagNameAttribute.Name?.[1]?.image) {
-            tagName = `attributes.${tagNameAttribute.Name[1].image}`;
-        } else {
-            throw "Invalid attribute";
-        }
-
-        const contentAttributeCtx = ctx.attribute.find( attributeCtx => attributeCtx.children.Name[0].image === 'value')?.children;
-        const contentAttributeName = contentAttributeCtx.Name[1].image;
+    edit( element, isTopLevel ) {
+        const tagNameAttribute = element.attributes.find( attr => attr.name === 'tagName' );
+        const tagNameStr = serializeAttributeValue( tagNameAttribute );
+        const valueAttributeAST = element.attributes.find( attr => attr.name === 'value' );
         
         // TODO: Inject extra attributes
-
-        let attributesStr = `{ __experimentalVersion: 2, value: attributes.${contentAttributeName}, onChange: newValue => setAttributes( { ${contentAttributeName}: newValue } ) }`;
+        let attributesStr = `{ __experimentalVersion: 2, tagName: ${tagNameStr}, value: attributes.${valueAttributeAST.value}, onChange: newValue => setAttributes( { ${valueAttributeAST.value}: newValue } ) }`;
         attributesStr = isTopLevel ? `Object.assign( {}, wp.blockEditor.useBlockProps(), ${attributesStr} )` : attributesStr;
         return `wp.element.createElement( wp.blockEditor.PlainText, ${attributesStr} )`;
     }

@@ -5,5 +5,5 @@
       "type": "string"
     }
   },
-  "view": "<wp.plain value={content} tagName=\"code\" />"
+  "view": "<wp.plain value={content} tagName=\"pre\" />"
 }
