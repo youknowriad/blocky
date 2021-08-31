@@ -10,7 +10,7 @@ The WordPress block API is very powerful, it's very flexible and allows any kind
 
 1- Create a block.json file like this:
 
-```json
+```js
 // example/rich.json
 {
   //This is the block name.
