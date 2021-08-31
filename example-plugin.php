@@ -14,3 +14,4 @@
 require_once( __DIR__ . '/dist/example-static/index.php' );
 require_once( __DIR__ . '/dist/example-plain/index.php' );
 require_once( __DIR__ . '/dist/example-rich/index.php' );
+require_once( __DIR__ . '/dist/example-inspector/index.php' );

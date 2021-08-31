@@ -1,7 +1,16 @@
 const plain = require( './attributes/plain');
 const rich = require( './attributes/rich');
+const number = require( './attributes/number' );
 
-module.exports = [
-    plain,
-    rich
-];
+const attributeHandlers = {
+    inline: [
+        plain,
+        rich
+    ],
+
+    type: [
+        number
+    ]
+};
+
+module.exports = attributeHandlers;

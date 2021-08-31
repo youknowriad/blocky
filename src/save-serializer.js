@@ -1,29 +1,30 @@
-const attributesHandler = require('./attribute-handlers');
-const { serializeChildren, serializeAttributes } = require('./serializer');
+const { inline: inlineAttributeHandlers } = require("./attribute-handlers");
+const { serializeChildren, serializeAttributes } = require("./serializer");
 
-function serializeElement( element, isTopLevel = false ) {
-    const elementName = element.name;
+function serializeElement(element, isTopLevel = false) {
+  const elementName = element.name;
 
-    const attributeHandler = attributesHandler.find(handler => handler.name === elementName);
-    if ( attributeHandler ) {
-      return attributeHandler.save(element, isTopLevel);
-    }
+  const attributeHandler = inlineAttributeHandlers.find(
+    (handler) => handler.name === elementName
+  );
+  if (attributeHandler) {
+    return attributeHandler.save(element, isTopLevel);
+  }
 
-    const childrenStr = serializeChildren( element.children, serializeElement );
-    let attributesStr = serializeAttributes( element.attributes );
+  const childrenStr = serializeChildren(element.children, serializeElement);
+  let attributesStr = serializeAttributes(element.attributes);
 
-    if (isTopLevel) {
-      attributesStr = attributesStr = "null"
-        ? "wp.blockEditor.useBlockProps.save()"
-        : `wp.blockEditor.useBlockProps.save(${attributesStr})`;
-    }
+  if (isTopLevel) {
+    attributesStr = attributesStr = "null"
+      ? "wp.blockEditor.useBlockProps.save()"
+      : `wp.blockEditor.useBlockProps.save(${attributesStr})`;
+  }
 
-    return `wp.element.createElement( "${elementName}" , ${attributesStr}, ${childrenStr} )`;
-
+  return `wp.element.createElement( "${elementName}" , ${attributesStr}, ${childrenStr} )`;
 }
 
-module.exports = function( blockCst ) {
-    return `function ( { attributes } ) { 
-    return ${serializeElement(blockCst, true)};
+module.exports = function (blockCst) {
+  return `function ( { attributes } ) { 
+    return ${serializeElement(blockCst.root, true)};
 }`;
-}
+};

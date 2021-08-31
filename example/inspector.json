@@ -1,0 +1,13 @@
+{
+    "name": "example/inspector",
+    "attributes": {
+      "content": {
+        "type": "string"
+      },
+      "level": {
+          "type": "number",
+          "label": "Level"
+      }
+    },
+    "view": "<wp.rich value={content} tagName=\"div\" />"
+  }

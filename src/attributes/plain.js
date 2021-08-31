@@ -1,4 +1,4 @@
-const { serializeAttributeValue } = require('../serializer');
+const { serializeAttributeValue, extractBlockAttributesFromElementAttributes } = require('../serializer');
 
 module.exports = {
     name: 'wp.plain',
@@ -22,5 +22,13 @@ module.exports = {
         let attributesStr = `{ __experimentalVersion: 2, tagName: ${tagNameStr}, value: attributes.${valueAttributeAST.value}, onChange: newValue => setAttributes( { ${valueAttributeAST.value}: newValue } ) }`;
         attributesStr = isTopLevel ? `Object.assign( {}, wp.blockEditor.useBlockProps(), ${attributesStr} )` : attributesStr;
         return `wp.element.createElement( wp.blockEditor.PlainText, ${attributesStr} )`;
+    },
+
+    extractAttributes( element ) {
+        const blockAttributes = extractBlockAttributesFromElementAttributes( element.attributes );
+        const valueAttributeAST = element.attributes.find( attr => attr.name === 'value' );
+        blockAttributes.inline.push( valueAttributeAST.value );
+
+        return blockAttributes;
     }
 }

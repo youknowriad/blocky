@@ -30,7 +30,10 @@ yargs(hideBin(process.argv))
     const lexingResult = lexer.tokenize(source.view);
     parser.input = lexingResult.tokens;
     const rawAst = parser.document();
-    const blockAst = visitor.visit( rawAst );
+    const blockAst = {
+      root: visitor.visit( rawAst ),
+      attributes: source.attributes,
+    };
     if (parser.errors.length > 0) {
       throw new Error("sad sad panda, Parsing errors detected");
     }
