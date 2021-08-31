@@ -1,18 +1,18 @@
 {
-    "name": "example/rich",
-    "attributes": {
-      "content": {
-        "type": "string"
-      }
+  "name": "example/rich",
+  "attributes": {
+    "content": {
+      "type": "string"
+    }
+  },
+  "view": "<wp.rich value={content} tagName=\"div\" />",
+  "supports": {
+    "color": {
+      "link": true
     },
-    "view": "<wp.rich value={content} tagName=\"div\" />",
-    "supports": {
-      "color": {
-        "link": true
-      },
-      "typography": {
-        "fontSize": true,
-        "lineHeight": true
-      }
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true
     }
   }
+}
