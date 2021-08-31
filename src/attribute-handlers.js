@@ -1,4 +1,7 @@
-const plain = require( './attributes/plain.js');
+const plain = require( './attributes/plain');
+const rich = require( './attributes/rich');
+
 module.exports = [
-    plain
+    plain,
+    rich
 ];

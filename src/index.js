@@ -60,6 +60,7 @@ yargs(hideBin(process.argv))
       title: source.title ?? source.name,
       category: source.category ?? "common",
       icon: source.icon ?? "smiley",
+      supports: source.supports ?? {},
       description: source.description ?? "No description",
       editorScript: 'file:./editor.js'
     };
