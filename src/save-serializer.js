@@ -15,7 +15,7 @@ function serializeElement(element, isTopLevel = false) {
   let attributesStr = serializeAttributes(element.attributes);
 
   if (isTopLevel) {
-    attributesStr = attributesStr == "null"
+    attributesStr = attributesStr === "null"
       ? "wp.blockEditor.useBlockProps.save()"
       : `wp.blockEditor.useBlockProps.save( ${attributesStr} )`;
   }

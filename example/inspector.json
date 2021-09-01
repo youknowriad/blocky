@@ -6,7 +6,11 @@
       },
       "level": {
           "type": "number",
-          "label": "Level"
+          "label": "Level",
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "help": "Just trying some number attribute"
       }
     },
     "view": "<div><div><strong>Level: {{level}}</strong></div><wp.rich value={content} tagName=\"div\" /></div>"

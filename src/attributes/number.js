@@ -13,6 +13,14 @@ module.exports = {
                       /"/g,
                       '\\"'
                     )}",
+                    min: ${attributeSchema?.min ?? "undefined"},
+                    max: ${attributeSchema?.max ?? "undefined"},
+                    step: ${attributeSchema?.step ?? "1"},
+                    help: ${
+                      attributeSchema?.help
+                        ? '"' + attributeSchema?.help.replace(/"/g, '\\"') + '"'
+                        : "undefined"
+                    },
                     value: attributes.${attributeName} || '',
                     onChange: newValue => setAttributes( { ${attributeName}: parseInt( newValue, 10 ) } ),
                 }
@@ -21,5 +29,5 @@ module.exports = {
     )`;
   },
 
-  dependencies: [ 'wp-element', 'wp-block-editor', 'wp-components' ],
+  dependencies: ["wp-element", "wp-block-editor", "wp-components"],
 };
