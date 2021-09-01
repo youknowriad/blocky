@@ -1,7 +1,13 @@
+const options = require("./options");
+
 module.exports = {
   type: "string",
 
   edit(attributeName, attributeSchema) {
+    if (attributeSchema.options) {
+      return options.edit(attributeName, attributeSchema);
+    }
+
     return `wp.element.createElement( 
           wp.blockEditor.InspectorControls, 
           null,
